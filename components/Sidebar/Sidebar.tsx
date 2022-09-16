@@ -1,7 +1,7 @@
 import { FC, createElement } from 'react'
-import { LaptopOutlined, NotificationOutlined, UserOutlined } from '@ant-design/icons';
-import { Layout, Menu } from 'antd';
-import type { MenuProps } from 'antd';
+import { LaptopOutlined, NotificationOutlined, UserOutlined } from '@ant-design/icons'
+import { Layout, Menu } from 'antd'
+import type { MenuProps } from 'antd'
 
 type SidebarProps = {}
 
@@ -10,7 +10,7 @@ export const Sidebar: FC<SidebarProps> = () => {
 
   const items2: MenuProps['items'] = [UserOutlined, LaptopOutlined, NotificationOutlined].map(
     (icon, index) => {
-      const key = String(index + 1);
+      const key = String(index + 1)
   
       return {
         key: `sub${key}`,
@@ -18,15 +18,15 @@ export const Sidebar: FC<SidebarProps> = () => {
         label: `subnav ${key}`,
   
         children: new Array(4).fill(null).map((_, j) => {
-          const subKey = index * 4 + j + 1;
+          const subKey = index * 4 + j + 1
           return {
             key: subKey,
             label: `option${subKey}`,
-          };
+          }
         }),
-      };
+      }
     },
-  );
+  )
 
   return (
     <Sider className="site-layout-background" width={200}>

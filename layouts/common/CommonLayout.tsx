@@ -1,5 +1,5 @@
 import { FC, ReactElement } from 'react'
-import { Breadcrumb, Layout } from 'antd';
+import { Breadcrumb, Layout } from 'antd'
 import { Header } from '../../components/Header/Header'
 
 type CommonLayoutProps = {
