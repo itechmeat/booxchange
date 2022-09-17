@@ -2,3 +2,13 @@ html, body {
   margin: 0;
   padding: 0;
 }
+
+body {
+  & > div {
+    height: 100%;
+  }
+}
+
+.ant-layout {
+  min-height: 100%;
+}

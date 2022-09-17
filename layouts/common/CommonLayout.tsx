@@ -10,7 +10,6 @@ type CommonLayoutProps = {
 export const CommonLayout: FC<CommonLayoutProps> = ({ children, sider }) => {
   const { Content, Footer } = Layout
 
-
   return (
     <Layout>
       <Header />
@@ -21,7 +20,7 @@ export const CommonLayout: FC<CommonLayoutProps> = ({ children, sider }) => {
           <Breadcrumb.Item>App</Breadcrumb.Item>
         </Breadcrumb>
         <Layout className="site-layout-background" style={{ padding: '24px 0' }}>
-          {sider}
+          {/* {sider} */}
           <Content style={{ padding: '0 24px' }}>
             {children}
           </Content>
