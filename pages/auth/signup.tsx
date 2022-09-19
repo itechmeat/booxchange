@@ -9,17 +9,16 @@ import { useAppDispatch } from '../../store/hooks'
 const SigUpPage: NextPage = () => {
   const dispatch = useAppDispatch()
 
-  const [error, serError] = useState<string>('')
+  const [error, setError] = useState<string>('')
 
   const onFinish = async (values: any) => {
-    serError('')
-    console.log('Success:', values);
+    setError('')
     const response: any = await dispatch(signUpAsync({
       email: values.email,
       password: values.password,
     }))
     if (response?.payload?.error?.message) {
-      serError(response.payload.error.message)
+      setError(response.payload.error.message)
     }
   }
 

@@ -1,6 +1,7 @@
 import type { NextPage } from 'next'
 import Head from 'next/head'
 import Image from 'next/image'
+import Link from 'next/link'
 import { Button } from 'antd'
 
 const Home: NextPage = () => {
@@ -13,10 +14,13 @@ const Home: NextPage = () => {
       </Head>
 
       <p>
-        <Button type="primary">Primary Button</Button>
+        <Button type="primary" href='/books'>Go to Books</Button>
       </p>
       <p>
         <Image src="/vercel.svg" alt="Vercel Logo" width={72} height={16} />
+      </p>
+      <p>
+        <Link href='/books'>Go to Books</Link>
       </p>
     </div>
   )

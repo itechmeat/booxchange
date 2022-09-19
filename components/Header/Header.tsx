@@ -15,10 +15,12 @@ export const Header: FC<HeaderProps> = () => {
   const dispatch = useAppDispatch()
   const { user, profile, isProfileLoaded, isLoading } = useAppSelector((state) => state.user)  
 
-  const items1: MenuProps['items'] = ['1', '2', '3'].map(key => ({
-    key,
-    label: `nav ${key}`,
-  }))
+  const items1: MenuProps['items'] = [
+    {
+      key: 1,
+      label: <Link href='/books'>Books</Link>,
+    }
+  ]
 
   const logout = async () => {
     await dispatch(logoutAsync())
