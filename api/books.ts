@@ -2,8 +2,8 @@ import { supabaseClient } from '../libs/supabase'
 
 export type Book = {
   id: string
-  title: string
   created_at: string
+  title: string
   isbn?: string
   owner_id: string
   country_id: string
@@ -52,12 +52,13 @@ export const emptyBook: NewBook = {
 
 export const fetchBooksAsync = async () => {
   if (!supabaseClient) return null
-  return await supabaseClient.from('books').select('*')
+  return await supabaseClient.from('books').select()
+  // return await supabaseClient.from('books').select('*, currancy:currancies(*), country:countries(*)')
 }
 
 export const fetchBookAsync = async (id: string) => {
   if (!supabaseClient) return null
-  const response = await supabaseClient.from('books').select('*').eq('id', id)
+  const response = await supabaseClient.from('books').select().eq('id', id)
   return response.data?.[0] || null
 }
 

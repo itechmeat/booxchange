@@ -1,4 +1,4 @@
-import { FC, useState } from 'react'
+import { FC, useState, useEffect, useCallback } from 'react'
 import router from 'next/router'
 import { Alert, Button, Form, Input, InputNumber, Select } from 'antd'
 import { useAppSelector } from '../../store/hooks'
@@ -11,15 +11,16 @@ type BookFormProps = {
 export const BookForm: FC<BookFormProps> = ({ book }) => {
   const [editedBook, setEditedBook] = useState<NewBook>(book || emptyBook)
   const { user } = useAppSelector((state) => state.user)  
+  const { currancies } = useAppSelector((state) => state.currancies)  
 
   const [error, setError] = useState<string>('')
 
-  const editBook = (key: string, value: any): void => {
+  const editBook = useCallback((key: string, value: any) => {
     setEditedBook({
       ...editedBook,
       [key]: value,
     })
-  }
+  }, [editedBook])
 
   const onFinish = async () => {
     setError('')
@@ -43,13 +44,18 @@ export const BookForm: FC<BookFormProps> = ({ book }) => {
     console.error('Failed:', errorInfo)
   }
 
+  useEffect(() => {
+    if (!editedBook.currancy_id && currancies?.length) {
+      editBook('currancy_id', currancies[0].id)
+    }
+  }, [currancies, editBook, editedBook.currancy_id])
+
   const { Option } = Select
   const selectAfter = (
-    <Select defaultValue="USD" style={{ width: 60 }}>
-      <Option value="USD">$</Option>
-      <Option value="EUR">€</Option>
-      <Option value="GBP">£</Option>
-      <Option value="CNY">¥</Option>
+    <Select defaultValue={editedBook.currancy_id} style={{ width: 80 }} onChange={(value) => editBook('currancy_id', value)}>
+      {currancies.map(currancy => (
+        <Option value={currancy.id} key={currancy.id}>{currancy.code}</Option>
+      ))}
     </Select>
   )
 
@@ -60,7 +66,7 @@ export const BookForm: FC<BookFormProps> = ({ book }) => {
 
       <br />
 
-      <h1>Add new book</h1>
+      <h1>{editedBook.id ? 'Edit book': 'Add new book'}</h1>
 
       <Form
         name="basic"

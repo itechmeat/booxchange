@@ -1,9 +1,15 @@
 import { Action, configureStore, ThunkAction } from '@reduxjs/toolkit'
 import userReducer from './slices/user'
+import countriesSlice from './slices/countries'
+import curranciesSlice from './slices/currancies'
+import languagesSlice from './slices/languages'
 
 export const store= configureStore({
   reducer: {
-    user: userReducer.reducer
+    user: userReducer.reducer,
+    countries: countriesSlice.reducer,
+    currancies: curranciesSlice.reducer,
+    languages: languagesSlice.reducer,
   }
 })
 
