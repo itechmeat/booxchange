@@ -1,6 +1,9 @@
 import { FC, useState, useEffect, useCallback } from 'react'
 import router from 'next/router'
-import { Alert, Button, Form, Input, InputNumber, Select } from 'antd'
+import { Alert, Button, Form, Input, InputNumber, Select, Upload } from 'antd'
+import ImgCrop from 'antd-img-crop';
+import type { RcFile, UploadFile, UploadProps } from 'antd/es/upload/interface'
+import { supabaseClient } from '../../libs/supabase';
 import { useAppSelector } from '../../store/hooks'
 import { Book, NewBook, emptyBook, postBookAsync, updateBookAsync } from '../../api/books'
 
@@ -14,6 +17,7 @@ export const BookForm: FC<BookFormProps> = ({ book }) => {
   const { currancies } = useAppSelector((state) => state.currancies)  
 
   const [error, setError] = useState<string>('')
+  const [fileList, setFileList] = useState<UploadFile[]>([])
 
   const editBook = useCallback((key: string, value: any) => {
     setEditedBook({
@@ -21,6 +25,10 @@ export const BookForm: FC<BookFormProps> = ({ book }) => {
       [key]: value,
     })
   }, [editedBook])
+
+  const onChange: UploadProps['onChange'] = ({ fileList: newFileList }) => {
+    setFileList(newFileList);
+  }
 
   const onFinish = async () => {
     setError('')
@@ -42,6 +50,31 @@ export const BookForm: FC<BookFormProps> = ({ book }) => {
 
   const onFinishFailed = (errorInfo: any) => {
     console.error('Failed:', errorInfo)
+  }
+
+  const onPreview = async (file: UploadFile) => {
+    let src = file.url as string
+    if (!src) {
+      src = await new Promise(resolve => {
+        const reader = new FileReader()
+        reader.readAsDataURL(file.originFileObj as RcFile)
+        reader.onload = () => resolve(reader.result as string)
+      })
+    }
+    const image = new Image()
+    image.src = src
+    const imgWindow = window.open(src)
+    imgWindow?.document.write(image.outerHTML)
+  }
+
+  const upload = () => {
+    fileList.forEach(async photo => {
+      if (!supabaseClient || !photo.originFileObj || !user?.id) return
+      const result = await supabaseClient.storage
+        .from('books')
+        .upload(`${user.id}-${photo.name}`, photo.originFileObj)
+      console.log('===>', result)
+    })
   }
 
   useEffect(() => {
@@ -67,6 +100,21 @@ export const BookForm: FC<BookFormProps> = ({ book }) => {
       <br />
 
       <h1>{editedBook.id ? 'Edit book': 'Add new book'}</h1>
+
+      <ImgCrop rotate>
+        <Upload
+          listType="picture-card"
+          fileList={fileList}
+          onChange={onChange}
+          onPreview={onPreview}
+        >
+          {fileList.length < 5 && '+ Upload'}
+        </Upload>
+      </ImgCrop>
+      <Button type='primary'  onClick={upload}>Upload</Button>
+
+      <br />
+      <br />
 
       <Form
         name="basic"

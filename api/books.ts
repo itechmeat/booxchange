@@ -31,6 +31,7 @@ export type NewBook = {
   price?: number
   year?: number
   school_classes?: number[]
+  photo_urls?: string[]
   status?: number
 }
 
@@ -47,6 +48,7 @@ export const emptyBook: NewBook = {
   price: 0,
   year: 0,
   school_classes: [],
+  photo_urls: [],
   status: 0,
 }
 
